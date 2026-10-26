@@ -1,0 +1,122 @@
+<!DOCTYPE html>
+<html>
+<head><meta charset="utf-8"><title>check</title>
+<style>body{margin:0}iframe{border:0;display:block}</style>
+</head>
+<body>
+<script>
+const sizes = [
+  { id: "desktop", w: 1440, h: 3400 },
+  { id: "tablet", w: 900, h: 3400 },
+  { id: "mobile", w: 390, h: 3400 }
+];
+const results = {};
+
+function rect(el) {
+  const r = el.getBoundingClientRect();
+  return { x: Math.round(r.x), y: Math.round(r.y), w: Math.round(r.width), h: Math.round(r.height) };
+}
+
+function measure(doc, win) {
+  const cards = [...doc.querySelectorAll(".card")];
+  const rows = [...doc.querySelectorAll(".row")];
+  const first = cards[0];
+  return {
+    viewport: win.innerWidth,
+    docScrollWidth: doc.documentElement.scrollWidth,
+    bodyScrollWidth: doc.body.scrollWidth,
+    heroH: Math.round(doc.querySelector(".hero").getBoundingClientRect().height),
+    h1: rect(doc.querySelector("h1")),
+    stats: rect(doc.querySelector(".stats")),
+    controls: rect(doc.querySelector(".controls")),
+    search: rect(doc.querySelector(".search")),
+    chips: rect(doc.querySelector(".chips")),
+    podium: rect(doc.querySelector(".podium")),
+    cards: cards.map(c => ({ t: c.querySelector("h3").textContent, ...rect(c), img: !!c.querySelector("img") })),
+    firstCardImgBox: first ? rect(first.querySelector(".card-media")) : null,
+    rows: rows.slice(0, 3).map(r => ({ t: r.querySelector(".row__title").textContent, ...rect(r), title: rect(r.querySelector(".row__title")), meta: rect(r.querySelector(".row__meta")), score: rect(r.querySelector(".row__score")) })),
+    rowCount: rows.length,
+    images: [...doc.images].length,
+    imagesLoaded: [...doc.images].filter(i => i.complete && i.naturalWidth > 0).length,
+    fonts: doc.fonts ? doc.fonts.status : "n/a",
+    statValues: [...doc.querySelectorAll(".stat dd")].map(d => d.textContent),
+    genreChips: [...doc.querySelectorAll(".chip")].map(c => c.textContent.trim()),
+    cssLoaded: getComputedStyle(doc.body).fontFamily,
+    bodyBg: getComputedStyle(doc.body).backgroundColor,
+    emptyHidden: doc.querySelector("#empty").hidden,
+    podiumHidden: doc.querySelector("#podium").hidden
+  };
+}
+
+function interact(doc, win) {
+  const out = {};
+  const search = doc.querySelector("#search");
+
+  search.value = "zzzz";
+  search.dispatchEvent(new win.Event("input", { bubbles: true }));
+  out.emptyVisibleAfterSearch = !doc.querySelector("#empty").hidden;
+  out.podiumHiddenAfterSearch = doc.querySelector("#podium").hidden;
+  out.metaAfterSearch = doc.querySelector("#results-meta").textContent;
+
+  doc.querySelector("[data-reset]").click();
+  out.metaAfterReset = doc.querySelector("#results-meta").textContent;
+  out.searchAfterReset = search.value;
+
+  const rpg = [...doc.querySelectorAll(".chip")].find(c => c.dataset.genre === "RPG");
+  rpg.click();
+  out.rpgCards = doc.querySelectorAll(".card").length;
+  out.rpgRows = doc.querySelectorAll(".row").length;
+  out.metaAfterGenre = doc.querySelector("#results-meta").textContent;
+  out.chipPressed = rpg.getAttribute("aria-pressed");
+  out.podiumTitles = [...doc.querySelectorAll(".card h3")].map(h => h.textContent);
+
+  doc.querySelector(".row").click();
+  out.dialogOpen = doc.querySelector("dialog").open;
+  out.dialogTitle = (doc.querySelector(".dialog__body h3") || {}).textContent;
+  out.dialogScore = (doc.querySelector(".dialog__score-value") || {}).textContent;
+  out.dialogImg = !!(doc.querySelector(".dialog__media img") || doc.querySelector(".dialog__fallback"));
+  doc.querySelector("[data-close]").click();
+  out.dialogClosed = !doc.querySelector("dialog").open;
+
+  // Sin resultados, el buscador de texto también debe funcionar con género activo
+  search.value = "elden";
+  search.dispatchEvent(new win.Event("input", { bubbles: true }));
+  out.searchWithinGenre = [...doc.querySelectorAll(".row__title")].map(t => t.textContent);
+  out.emptyWhenNoMatch = !doc.querySelector("#empty").hidden;
+
+  return out;
+}
+
+const frames = sizes.map(s => {
+  const f = document.createElement("iframe");
+  f.width = s.w;
+  f.height = s.h;
+  f.src = "http://localhost:8123/";
+  document.body.appendChild(f);
+  return { f, s };
+});
+
+let pending = frames.length;
+frames.forEach(({ f, s }) => {
+  f.addEventListener("load", () => {
+    setTimeout(() => {
+      try {
+        results[s.id] = measure(f.contentDocument, f.contentWindow);
+        if (s.id === "desktop") {
+          results.interactions = interact(f.contentDocument, f.contentWindow);
+        }
+      } catch (e) {
+        results[s.id] = { error: String(e) };
+      }
+      if (--pending === 0) {
+        const pre = document.createElement("pre");
+        pre.id = "results";
+        pre.textContent = JSON.stringify(results, null, 1);
+        document.body.appendChild(pre);
+      }
+    }, 1500);
+  });
+});
+</script>
+</body>
+</html>

@@ -1,0 +1,168 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>GG RANK — Los mejores juegos del momento</title>
+  <meta name="description" content="Ranking de los mejores videojuegos del momento: puntuaciones, géneros, plataformas y fichas de cada título." />
+  <meta name="theme-color" content="#06080f" />
+  <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='16' fill='%230b0f19'/%3E%3Ctext x='32' y='45' font-family='Arial,sans-serif' font-size='36' font-weight='bold' fill='%238b5cf6' text-anchor='middle'%3EG%3C/text%3E%3C/svg%3E" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Space+Grotesk:wght@500;600;700&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="css/styles.css" />
+</head>
+<body>
+  <a class="skip-link" href="#ranking">Saltar al ranking</a>
+
+  <header class="topbar">
+    <div class="wrap topbar__inner">
+      <a class="brand" href="#top">
+        <span class="brand__mark" aria-hidden="true">G</span>
+        <span class="brand__name">GG<span>//</span>RANK</span>
+      </a>
+      <nav class="nav" aria-label="Navegación principal">
+        <a href="#ranking">Ranking</a>
+        <a href="#generos">Géneros</a>
+        <a href="#acerca">Cómo puntuamos</a>
+      </nav>
+      <span class="pill pill--live"><span class="dot" aria-hidden="true"></span>Actualizado</span>
+    </div>
+  </header>
+
+  <main id="top">
+    <section class="hero">
+      <div class="wrap hero__inner">
+        <span class="eyebrow">Actualizado · Octubre 2026</span>
+        <h1>Los mejores juegos<br /><span class="grad">del momento</span></h1>
+        <p class="hero__lead">
+          Un ranking curado de los títulos que están marcando la agenda: críticas brillantes,
+          comunidades activas y horas de vicio garantizadas.
+        </p>
+        <div class="hero__actions">
+          <a class="btn btn--primary" href="#ranking">Ver el ranking</a>
+          <a class="btn btn--ghost" href="#acerca">Cómo puntuamos</a>
+        </div>
+
+        <dl class="stats">
+          <div class="stat">
+            <dt>Títulos</dt>
+            <dd id="stat-games">—</dd>
+          </div>
+          <div class="stat">
+            <dt>Nota media</dt>
+            <dd id="stat-score">—</dd>
+          </div>
+          <div class="stat">
+            <dt>Géneros</dt>
+            <dd id="stat-genres">—</dd>
+          </div>
+        </dl>
+      </div>
+    </section>
+
+    <section class="controls-wrap" id="generos" aria-label="Filtros del ranking">
+      <div class="wrap">
+        <div class="controls">
+          <label class="search">
+            <svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="11" cy="11" r="7" /><path d="m20 20-3.4-3.4" /></svg>
+            <input id="search" type="search" placeholder="Buscar por juego, estudio o género…" autocomplete="off" aria-label="Buscar juegos" />
+            <kbd aria-hidden="true">/</kbd>
+          </label>
+          <div id="chips" class="chips" role="group" aria-label="Filtrar por género"></div>
+        </div>
+        <p class="results-meta" id="results-meta" role="status" aria-live="polite"></p>
+      </div>
+    </section>
+
+    <section class="section" id="ranking" aria-labelledby="podium-title">
+      <div class="wrap">
+        <div class="section-head">
+          <div>
+            <h2 id="podium-title">El podio</h2>
+            <p>Los tres primeros puestos del ranking.</p>
+          </div>
+        </div>
+        <div id="podium" class="podium"></div>
+      </div>
+    </section>
+
+    <section class="section section--tight" id="rest-section" aria-labelledby="rest-title">
+      <div class="wrap">
+        <div class="section-head">
+          <div>
+            <h2 id="rest-title">Resto del ranking</h2>
+            <p>Del cuarto puesto en adelante.</p>
+          </div>
+          <span class="count" id="count"></span>
+        </div>
+        <div id="list" class="rows"></div>
+        <div id="empty" class="empty" hidden>
+          <strong>Sin resultados</strong>
+          <p>Probá con otro término o quitá el filtro de género.</p>
+          <button class="btn btn--ghost" type="button" data-reset>Limpiar filtros</button>
+        </div>
+      </div>
+    </section>
+
+    <section class="section about" id="acerca" aria-labelledby="about-title">
+      <div class="wrap">
+        <div class="section-head">
+          <div>
+            <h2 id="about-title">Cómo puntuamos</h2>
+            <p>Tres criterios simples, sin vueltas.</p>
+          </div>
+        </div>
+        <div class="about-grid">
+          <article class="about-card">
+            <span class="about-card__num">01</span>
+            <h3>Consenso crítico</h3>
+            <p>Promedio de reseñas especializadas y valoraciones de la comunidad, normalizado a una escala de 0 a 100.</p>
+          </article>
+          <article class="about-card">
+            <span class="about-card__num">02</span>
+            <h3>Estado actual</h3>
+            <p>Se prioriza cómo se juega hoy: parches, rendimiento y contenido vigente por encima del lanzamiento original.</p>
+          </article>
+          <article class="about-card">
+            <span class="about-card__num">03</span>
+            <h3>Impacto cultural</h3>
+            <p>Peso extra para los juegos que definieron conversaciones, géneros o formas de jugar en el último año.</p>
+          </article>
+        </div>
+        <p class="about-note">
+          <strong>Nota:</strong> esta es una página de demostración. Las puntuaciones son datos de ejemplo y se
+          editan a mano en <code>js/data.js</code>.
+        </p>
+      </div>
+    </section>
+  </main>
+
+  <footer class="footer">
+    <div class="wrap footer__inner">
+      <div>
+        <a class="brand brand--sm" href="#top">
+          <span class="brand__mark" aria-hidden="true">G</span>
+          <span class="brand__name">GG<span>//</span>RANK</span>
+        </a>
+        <p class="footer__text">Ranking editorial de videojuegos. Datos de ejemplo, listos para reemplazar.</p>
+      </div>
+      <div class="footer__links">
+        <a href="#ranking">Ranking</a>
+        <a href="#acerca">Cómo puntuamos</a>
+        <a href="https://vercel.com" target="_blank" rel="noopener">Hecho para Vercel</a>
+      </div>
+    </div>
+  </footer>
+
+  <dialog id="detail" class="dialog" aria-labelledby="detail-title">
+    <button class="dialog__close" type="button" data-close aria-label="Cerrar ficha">
+      <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M6 6l12 12M18 6 6 18" /></svg>
+    </button>
+    <div id="detail-content"></div>
+  </dialog>
+
+  <script src="js/data.js"></script>
+  <script src="js/app.js"></script>
+</body>
+</html>
